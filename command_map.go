@@ -7,7 +7,7 @@ import (
 )
 
 
-func commandMap(config *config) error {
+func commandMap(config *config, arg string) error {
 	res, err := pokeapi.GetLocationAreas(config.Next, &config.cache)
 	if err != nil {
 		fmt.Println(err)

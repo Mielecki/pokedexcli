@@ -6,7 +6,7 @@ import (
 	"github.com/Mielecki/pokedexcli/internal/pokeapi"
 )
 
-func commandMapb(config *config) error {
+func commandMapb(config *config, arg string) error {
 	res, err := pokeapi.GetLocationAreas(config.Previous, &config.cache)
 	if err != nil {
 		fmt.Println(err)
