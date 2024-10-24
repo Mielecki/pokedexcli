@@ -5,12 +5,16 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
+
+	"github.com/Mielecki/pokedexcli/internal/pokecache"
 )
 
 
 type config struct {
 	Next *string // URL of the next 20 locations 
 	Previous *string // URL of the previous 20 locations
+	cache pokecache.Cache
 }
 
 type cliCommand struct {
@@ -57,6 +61,7 @@ func normalizeInput(input string) (output string) {
 func startRepl(config *config) {
 	scanner := bufio.NewScanner(os.Stdin)
 	commands := getCommands()
+	config.cache = pokecache.NewCache(5 * time.Minute)
 	
 	for {
 		fmt.Printf("Pokedex > ")

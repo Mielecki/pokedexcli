@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+
+	"github.com/Mielecki/pokedexcli/internal/pokecache"
 )
 
 const (
@@ -21,21 +23,27 @@ type LocationAreaBody struct {
 	} `json:"results"`
 }
 
-func GetLocationAreas(locationURL *string) (LocationAreaBody, error) {
+func GetLocationAreas(locationURL *string, cache *pokecache.Cache) (LocationAreaBody, error) {
 	url := apiURL + "/location-area"
 	if locationURL != nil {
 		url = *locationURL
 	}
 
-	res, err := http.Get(url)
-	if err != nil {
-		return LocationAreaBody{}, err
-	}
-	defer res.Body.Close()
+	data, ok := cache.Get(url)
 
-	data, err := io.ReadAll(res.Body)
-	if err != nil {
-		return LocationAreaBody{}, err
+	if !ok {
+		res, err := http.Get(url)
+		if err != nil {
+			return LocationAreaBody{}, err
+		}
+		defer res.Body.Close()
+
+		data, err = io.ReadAll(res.Body)
+		if err != nil {
+			return LocationAreaBody{}, err
+		}
+
+		cache.Add(url, data)
 	}
 	
 	locations := LocationAreaBody{}
@@ -46,5 +54,4 @@ func GetLocationAreas(locationURL *string) (LocationAreaBody, error) {
 	}
 
 	return locations, nil
-
 }

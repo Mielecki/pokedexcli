@@ -7,7 +7,7 @@ import (
 )
 
 func commandMapb(config *config) error {
-	res, err := pokeapi.GetLocationAreas(config.Previous)
+	res, err := pokeapi.GetLocationAreas(config.Previous, &config.cache)
 	if err != nil {
 		fmt.Println(err)
 	}

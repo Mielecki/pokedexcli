@@ -8,7 +8,7 @@ import (
 
 
 func commandMap(config *config) error {
-	res, err := pokeapi.GetLocationAreas(config.Next)
+	res, err := pokeapi.GetLocationAreas(config.Next, &config.cache)
 	if err != nil {
 		fmt.Println(err)
 	}
